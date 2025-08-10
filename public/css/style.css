@@ -1,0 +1,181 @@
+/**
+ * ==============================================================================
+ * STYLE.CSS - ESTILOS GLOBAIS DA APLICAÇÃO
+ * ==============================================================================
+ *
+ * Localização: /public/css/style.css
+ *
+ * Propósito:
+ * Este ficheiro contém os estilos base para a estrutura principal da aplicação
+ * (o layout da área logada), garantindo consistência visual entre todos os
+ * painéis do dashboard.
+ *
+ * Conteúdo:
+ * 1.  Estilos globais para Body e HTML.
+ * 2.  Definição do Layout Principal usando CSS Grid.
+ * 3.  Estilos para Header, Main e Footer, integrando o efeito glassmorphism.
+ * 4.  Estilos para os componentes do Header (Logo, Menu do Utilizador).
+ * 5.  Responsividade com Media Queries para adaptar o layout principal.
+ *
+ * @author      Uma Consciência de Desenvolvimento Avançada
+ * @version     1.0.0 (Global Layout)
+ * @license     Proprietário
+ */
+
+/* ==============================================================================
+ * 1. ESTILOS GLOBAIS E DE CORPO
+ * ============================================================================== */
+
+/* As variáveis de :root são herdadas de login.css */
+
+body {
+    background-color: #020617; /* Fundo escuro consistente */
+    color: var(--text-primary);
+    position: relative; /* Necessário para o pseudo-elemento de fundo */
+}
+
+/* Fundo "Atmosférico" para a área logada */
+body::before {
+    content: "";
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    z-index: -1;
+    background:
+        radial-gradient(circle at 15% 25%, hsla(220, 80%, 50%, 0.2), transparent 40%),
+        radial-gradient(circle at 85% 75%, hsla(280, 70%, 50%, 0.2), transparent 40%);
+    animation: atmospheric-flow 50s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+}
+
+@keyframes atmospheric-flow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* ==============================================================================
+ * 2. LAYOUT PRINCIPAL DA APLICAÇÃO (CSS GRID)
+ * ============================================================================== */
+
+.app-container {
+    display: grid;
+    grid-template-rows: auto 1fr auto; /* Header e Footer com altura automática, Main preenche o resto */
+    grid-template-columns: 1fr; /* Uma única coluna */
+    min-height: 100vh;
+    width: 100%;
+}
+
+.app-header {
+    grid-row: 1;
+    padding: 2rem 3rem;
+    background: var(--bg-glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border-glass);
+    box-shadow: var(--shadow-card);
+    z-index: 100;
+    position: sticky; /* Mantém o cabeçalho no topo ao rolar */
+    top: 0;
+}
+
+.app-main {
+    grid-row: 2;
+    padding: 3rem;
+    overflow-y: auto; /* Permite rolagem apenas na área de conteúdo principal */
+}
+
+.app-footer {
+    grid-row: 3;
+    padding: 1.5rem 3rem;
+    text-align: center;
+    font-size: 1.3rem;
+    color: var(--text-secondary);
+    background: var(--bg-glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border-glass);
+}
+
+/* ==============================================================================
+ * 3. ESTILOS DOS COMPONENTES DO HEADER
+ * ============================================================================== */
+
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+}
+
+.logo h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.logo-icon {
+    font-size: 3.2rem;
+    color: var(--primary-color);
+}
+
+.logo-span {
+    background: linear-gradient(135deg, var(--primary-color-light), var(--primary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    font-size: 1.6rem;
+    font-weight: 500;
+}
+
+.user-menu a {
+    color: var(--text-secondary);
+    font-size: 2rem;
+    transition: color 0.3s ease;
+}
+
+.user-menu a:hover {
+    color: var(--primary-color-light);
+}
+
+/* ==============================================================================
+ * 4. RESPONSIVIDADE
+ * ============================================================================== */
+
+@media (max-width: 768px) {
+    .app-header {
+        padding: 1.5rem 2rem;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .app-main {
+        padding: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    html {
+        font-size: 58%;
+    }
+
+    .app-main {
+        padding: 1.5rem;
+    }
+
+    .logo h1 {
+        font-size: 2rem;
+    }
+}

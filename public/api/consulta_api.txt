@@ -1,0 +1,125 @@
+<?php
+/**
+ * ==============================================================================
+ * API DE CONSULTA EM TEMPO REAL (Real-time Validation API) - v2.1 (Pathing Robusto)
+ * ==============================================================================
+ *
+ * Localização: /public/api/consulta_api.php
+ *
+ * Propósito:
+ * Este endpoint leve e focado é projetado para lidar com validações de dados
+ * assíncronas (AJAX) vindas do formulário de cadastro. Ele executa consultas
+ * rápidas para verificar a unicidade de dados (CPF, e-mail) ou a existência
+ * de registos (CNPJ), fornecendo um feedback instantâneo para o frontend.
+ *
+ * Aprimoramentos da v2.1:
+ * 1.  **Pathing Robusto:** A inclusão do ficheiro de configuração foi corrigida para
+ * funcionar de forma fiável a partir de subdiretórios.
+ * 2.  **Normalização de Input:** Todos os valores de consulta (CPF, CNPJ) são
+ * agora normalizados no backend antes da consulta.
+ *
+ * @author      Uma Consciência de Desenvolvimento Avançada
+ * @version     2.1.0 (Robust Pathing & Sanitization)
+ * @license     Proprietário
+ */
+
+// Define a constante de inicialização para segurança.
+define('APP_INITIATED', true);
+
+// **A CORREÇÃO CRÍTICA ESTÁ AQUI**
+// Usamos um caminho absoluto e fiável para o ficheiro de configuração.
+define('APP_ROOT', dirname(__DIR__, 2));
+
+// Carrega o nexo de configuração.
+require_once APP_ROOT . '/app/config/config.php';
+
+// --- Protocolo de Comunicação: JSON ---
+header('Content-Type: application/json');
+
+// --- Resposta Padrão ---
+$response = ['success' => false, 'message' => 'Consulta inválida.'];
+
+try {
+    // 1. Validação do Método da Requisição
+    if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+        http_response_code(405); // Method Not Allowed
+        $response['message'] = 'Método de requisição inválido.';
+        echo json_encode($response);
+        exit;
+    }
+
+    // 2. Validação dos Parâmetros de Entrada
+    $tipoConsulta = $_GET['tipo'] ?? null;
+    $valorConsulta = trim($_GET['valor'] ?? '');
+
+    if (empty($tipoConsulta) || $valorConsulta === '') { // Permite valor '0' mas não string vazia
+        http_response_code(400); // Bad Request
+        $response['message'] = 'Parâmetros de consulta ausentes ou inválidos.';
+        echo json_encode($response);
+        exit;
+    }
+
+    $pdo = getDbConnection();
+    $stmt = null;
+
+    // 3. Roteamento da Consulta com base no tipo
+    switch ($tipoConsulta) {
+        case 'cpf':
+            // Normaliza o CPF recebido para conter apenas números.
+            $cpfNormalizado = preg_replace('/\D/', '', $valorConsulta);
+            $sql = "SELECT EXISTS(SELECT 1 FROM usuarios WHERE cpf = :valor) as 'existe'";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(':valor', $cpfNormalizado);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            $response = ['success' => true, 'disponivel' => !$result['existe']];
+            break;
+
+        case 'email':
+            // Normaliza o e-mail para minúsculas para uma comparação case-insensitive.
+            $emailNormalizado = strtolower($valorConsulta);
+            $sql = "SELECT EXISTS(SELECT 1 FROM usuarios WHERE LOWER(email) = :valor) as 'existe'";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(':valor', $emailNormalizado);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            $response = ['success' => true, 'disponivel' => !$result['existe']];
+            break;
+
+        case 'cnpj':
+            // Normaliza o CNPJ recebido para conter apenas números.
+            $cnpjNormalizado = preg_replace('/\D/', '', $valorConsulta);
+            $sql = "SELECT id_otica, razao_social, endereco FROM oticas WHERE cnpj = :valor AND status = 'ativa' LIMIT 1";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(':valor', $cnpjNormalizado);
+            $stmt->execute();
+            $otica = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($otica) {
+                $response = ['success' => true, 'encontrado' => true, 'dados_otica' => $otica];
+            } else {
+                $response = ['success' => true, 'encontrado' => false, 'message' => 'CNPJ não encontrado ou não está ativo na nossa base.'];
+            }
+            break;
+
+        default:
+            http_response_code(400); // Bad Request
+            $response['message'] = 'Tipo de consulta não reconhecido.';
+            break;
+    }
+
+} catch (PDOException $e) {
+    http_response_code(500); // Internal Server Error
+    $response['message'] = 'Erro de comunicação com o banco de dados.';
+    error_log("Erro na API de Consulta: " . $e->getMessage());
+
+} catch (Exception $e) {
+    http_response_code(500); // Internal Server Error
+    $response['message'] = 'Ocorreu um erro inesperado no servidor.';
+    error_log("Erro inesperado na API de Consulta: " . $e->getMessage());
+}
+
+// --- Envio da Resposta Final ---
+echo json_encode($response);
+exit;
+?>

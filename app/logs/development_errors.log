@@ -1,0 +1,58 @@
+[10-Aug-2025 15:17:32 America/Sao_Paulo] PHP Fatal error:  Uncaught Error: Call to undefined function detectHttps() in C:\laragon\www\eps_campanhas_correto2\app\config\config.php:436
+Stack trace:
+#0 C:\laragon\www\eps_campanhas_correto2\public\login.php(66): require_once()
+#1 {main}
+  thrown in C:\laragon\www\eps_campanhas_correto2\app\config\config.php on line 436
+[10-Aug-2025 15:18:34 America/Sao_Paulo] PHP Fatal error:  Uncaught Error: Call to undefined function detectHttps() in C:\laragon\www\eps_campanhas_correto2\app\config\config.php:436
+Stack trace:
+#0 C:\laragon\www\eps_campanhas_correto2\public\login.php(66): require_once()
+#1 {main}
+  thrown in C:\laragon\www\eps_campanhas_correto2\app\config\config.php on line 436
+[10-Aug-2025 15:18:35 America/Sao_Paulo] PHP Fatal error:  Uncaught Error: Call to undefined function detectHttps() in C:\laragon\www\eps_campanhas_correto2\app\config\config.php:436
+Stack trace:
+#0 C:\laragon\www\eps_campanhas_correto2\public\login.php(66): require_once()
+#1 {main}
+  thrown in C:\laragon\www\eps_campanhas_correto2\app\config\config.php on line 436
+[10-Aug-2025 15:18:35 America/Sao_Paulo] PHP Fatal error:  Uncaught Error: Call to undefined function detectHttps() in C:\laragon\www\eps_campanhas_correto2\app\config\config.php:436
+Stack trace:
+#0 C:\laragon\www\eps_campanhas_correto2\public\login.php(66): require_once()
+#1 {main}
+  thrown in C:\laragon\www\eps_campanhas_correto2\app\config\config.php on line 436
+[10-Aug-2025 15:18:35 America/Sao_Paulo] PHP Fatal error:  Uncaught Error: Call to undefined function detectHttps() in C:\laragon\www\eps_campanhas_correto2\app\config\config.php:436
+Stack trace:
+#0 C:\laragon\www\eps_campanhas_correto2\public\login.php(66): require_once()
+#1 {main}
+  thrown in C:\laragon\www\eps_campanhas_correto2\app\config\config.php on line 436
+[10-Aug-2025 15:18:37 America/Sao_Paulo] PHP Fatal error:  Uncaught Error: Call to undefined function detectHttps() in C:\laragon\www\eps_campanhas_correto2\app\config\config.php:436
+Stack trace:
+#0 C:\laragon\www\eps_campanhas_correto2\public\login.php(66): require_once()
+#1 {main}
+  thrown in C:\laragon\www\eps_campanhas_correto2\app\config\config.php on line 436
+[10-Aug-2025 15:18:39 America/Sao_Paulo] PHP Fatal error:  Uncaught Error: Call to undefined function detectHttps() in C:\laragon\www\eps_campanhas_correto2\app\config\config.php:436
+Stack trace:
+#0 C:\laragon\www\eps_campanhas_correto2\public\login.php(66): require_once()
+#1 {main}
+  thrown in C:\laragon\www\eps_campanhas_correto2\app\config\config.php on line 436
+[10-Aug-2025 15:18:40 America/Sao_Paulo] PHP Fatal error:  Uncaught Error: Call to undefined function detectHttps() in C:\laragon\www\eps_campanhas_correto2\app\config\config.php:436
+Stack trace:
+#0 C:\laragon\www\eps_campanhas_correto2\public\login.php(66): require_once()
+#1 {main}
+  thrown in C:\laragon\www\eps_campanhas_correto2\app\config\config.php on line 436
+[10-Aug-2025 15:18:41 America/Sao_Paulo] PHP Fatal error:  Uncaught Error: Call to undefined function detectHttps() in C:\laragon\www\eps_campanhas_correto2\app\config\config.php:436
+Stack trace:
+#0 C:\laragon\www\eps_campanhas_correto2\public\login.php(66): require_once()
+#1 {main}
+  thrown in C:\laragon\www\eps_campanhas_correto2\app\config\config.php on line 436
+[10-Aug-2025 15:18:50 America/Sao_Paulo] PHP Fatal error:  Uncaught Error: Call to undefined function detectHttps() in C:\laragon\www\eps_campanhas_correto2\app\config\config.php:436
+Stack trace:
+#0 C:\laragon\www\eps_campanhas_correto2\public\login.php(66): require_once()
+#1 {main}
+  thrown in C:\laragon\www\eps_campanhas_correto2\app\config\config.php on line 436
+[10-Aug-2025 15:57:36 America/Sao_Paulo] CRITICAL REGISTRATION API ERROR: DatabaseManager::getInstance(): Argument #1 ($config) must be of type array, null given, called in C:\laragon\www\eps_campanhas_correto2\app\config\database.php on line 469
+[10-Aug-2025 15:58:21 America/Sao_Paulo] CRITICAL REGISTRATION API ERROR: DatabaseManager::getInstance(): Argument #1 ($config) must be of type array, null given, called in C:\laragon\www\eps_campanhas_correto2\app\config\database.php on line 469
+[10-Aug-2025 16:20:31 America/Sao_Paulo] CRITICAL REGISTRATION API ERROR: DatabaseManager::getInstance(): Argument #1 ($config) must be of type array, null given, called in C:\laragon\www\eps_campanhas_correto2\app\config\database.php on line 469
+[10-Aug-2025 16:21:01 America/Sao_Paulo] CRITICAL REGISTRATION API ERROR: DatabaseManager::getInstance(): Argument #1 ($config) must be of type array, null given, called in C:\laragon\www\eps_campanhas_correto2\app\config\database.php on line 469
+[10-Aug-2025 16:46:40 America/Sao_Paulo] CRITICAL REGISTRATION API ERROR: DatabaseManager::getInstance(): Argument #1 ($config) must be of type array, null given, called in C:\laragon\www\eps_campanhas_correto2\app\config\database.php on line 469
+[10-Aug-2025 16:46:52 America/Sao_Paulo] CRITICAL REGISTRATION API ERROR: DatabaseManager::getInstance(): Argument #1 ($config) must be of type array, null given, called in C:\laragon\www\eps_campanhas_correto2\app\config\database.php on line 469
+[10-Aug-2025 16:47:14 America/Sao_Paulo] CRITICAL REGISTRATION API ERROR: DatabaseManager::getInstance(): Argument #1 ($config) must be of type array, null given, called in C:\laragon\www\eps_campanhas_correto2\app\config\database.php on line 469
+[10-Aug-2025 16:53:46 America/Sao_Paulo] CRITICAL REGISTRATION API ERROR: DatabaseManager::getInstance(): Argument #1 ($config) must be of type array, null given, called in C:\laragon\www\eps_campanhas_correto2\app\config\database.php on line 469

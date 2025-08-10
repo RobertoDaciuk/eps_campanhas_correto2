@@ -1,0 +1,359 @@
+# ==============================================================================
+# CONFIGURAÇÃO APACHE PREMIUM - Sistema de Campanhas EPS v4.0
+# ==============================================================================
+# Localização: /public/.htaccess
+# 
+# Configuração completa de segurança, performance e redirecionamento
+# Otimizado para Laragon/XAMPP e sistema de campanhas Embrapol Sul
+# Compatível com Apache 2.4+
+
+# --- CONFIGURAÇÕES BÁSICAS DE SEGURANÇA ---
+Options -Indexes -MultiViews -ExecCGI
+DirectoryIndex index.php login.php
+ServerSignature Off
+
+# --- CONFIGURAÇÕES DE ENCODING ---
+AddDefaultCharset UTF-8
+AddCharset UTF-8 .php .html .css .js .json .xml
+
+# --- ATIVA REWRITE ENGINE ---
+RewriteEngine On
+RewriteBase /
+
+# --- PROTEÇÃO CONTRA ACESSO A ARQUIVOS SENSÍVEIS ---
+# Bloqueia acesso direto a diretórios críticos
+<FilesMatch "^(\.env|\.htaccess|\.git|composer\.|package\.json|\.sql)">
+    Order Deny,Allow
+    Deny from all
+</FilesMatch>
+
+# Bloqueia acesso aos diretórios do sistema
+RewriteRule ^app/ - [F,L]
+RewriteRule ^vendor/ - [F,L]
+RewriteRule ^node_modules/ - [F,L]
+RewriteRule ^\.git/ - [F,L]
+
+# Bloqueia arquivos de configuração e logs
+RewriteRule \.(env|log|sql|md|txt|ini|conf|bak|old|tmp)$ - [F,L]
+
+# --- REDIRECIONAMENTOS PRINCIPAIS ---
+# Redireciona raiz para login
+RewriteRule ^/?$ login.php [L,R=302]
+
+# --- ROTAS DA API ---
+# API de autenticação
+RewriteRule ^api/auth/?$ api/auth_api.php [L,QSA]
+RewriteRule ^api/login/?$ api/auth_api.php [L,QSA]
+
+# API de cadastro
+RewriteRule ^api/cadastro/?$ api/cadastro_api.php [L,QSA]
+RewriteRule ^api/register/?$ api/cadastro_api.php [L,QSA]
+
+# Validação em tempo real
+RewriteRule ^api/cadastro/validate/?$ api/cadastro_api.php [L,QSA,E=REQUEST_METHOD:GET]
+
+# Outras APIs futuras
+RewriteRule ^api/recovery/?$ api/recovery_api.php [L,QSA]
+RewriteRule ^api/activation/?$ api/activation_api.php [L,QSA]
+
+# --- CONFIGURAÇÕES DE CACHE ---
+<IfModule mod_expires.c>
+    ExpiresActive On
+    
+    # Cache longo para assets estáticos (1 mês)
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType text/javascript "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/webp "access plus 1 month"
+    ExpiresByType image/svg+xml "access plus 1 month"
+    ExpiresByType image/x-icon "access plus 1 year"
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType font/ttf "access plus 1 year"
+    ExpiresByType font/otf "access plus 1 year"
+    ExpiresByType application/font-woff "access plus 1 year"
+    ExpiresByType application/font-woff2 "access plus 1 year"
+    
+    # Cache médio para arquivos JSON (1 hora)
+    ExpiresByType application/json "access plus 1 hour"
+    ExpiresByType application/ld+json "access plus 1 hour"
+    
+    # Sem cache para páginas dinâmicas
+    ExpiresByType text/html "access plus 0 seconds"
+    ExpiresByType application/xhtml+xml "access plus 0 seconds"
+</IfModule>
+
+# --- COMPRESSÃO GZIP/DEFLATE ---
+<IfModule mod_deflate.c>
+    # Comprime tipos de arquivo principais
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE text/javascript
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+    AddOutputFilterByType DEFLATE application/json
+    AddOutputFilterByType DEFLATE application/ld+json
+    AddOutputFilterByType DEFLATE image/svg+xml
+    
+    # Não comprime arquivos já comprimidos
+    SetEnvIfNoCase Request_URI \
+        \.(?:gif|jpe?g|png|rar|zip|exe|flv|mov|wma|mp3|avi|swf|mp?g|mp4|webm|webp|pdf)$ no-gzip dont-vary
+    SetEnvIfNoCase Request_URI \.(?:rar|zip|exe)$ no-gzip dont-vary
+</IfModule>
+
+# --- HEADERS DE SEGURANÇA PREMIUM ---
+<IfModule mod_headers.c>
+    # Remove headers que expõem informações do servidor
+    Header unset Server
+    Header unset X-Powered-By
+    Header unset X-CF-Powered-By
+    Header always unset X-Pingback
+    
+    # Headers de segurança obrigatórios
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "DENY"
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set X-Permitted-Cross-Domain-Policies "none"
+    
+    # Content Security Policy robusto
+    Header always set Content-Security-Policy "default-src 'self'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; img-src 'self' data: blob:; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; script-src 'self' 'unsafe-inline'; connect-src 'self'; object-src 'none'; media-src 'self'; worker-src 'self'"
+    
+    # Permissions Policy (substitui Feature-Policy)
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=(), ambient-light-sensor=(), autoplay=(), battery=(), display-capture=(), document-domain=(), encrypted-media=(), fullscreen=(), midi=(), notifications=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), sync-xhr=(), web-share=()"
+    
+    # HSTS para HTTPS (apenas quando SSL estiver ativo)
+    <If "%{HTTPS} == 'on' || %{HTTP:X-Forwarded-Proto} == 'https' || %{HTTP:CF-Visitor} =~ /https/">
+        Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    </If>
+    
+    # Cache headers específicos por tipo de arquivo
+    <FilesMatch "\.(css|js)$">
+        Header set Cache-Control "public, max-age=2592000, immutable"
+        Header set Expires "Thu, 31 Dec 2037 23:55:55 GMT"
+        Header append Vary Accept-Encoding
+    </FilesMatch>
+    
+    <FilesMatch "\.(png|jpg|jpeg|gif|webp|svg|ico|woff|woff2|ttf|otf)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+        Header set Expires "Thu, 31 Dec 2037 23:55:55 GMT"
+    </FilesMatch>
+    
+    # Sem cache para páginas dinâmicas e APIs
+    <FilesMatch "\.(php|html)$">
+        Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+        Header set Pragma "no-cache"
+        Header set Expires "Mon, 01 Jan 1990 00:00:00 GMT"
+    </FilesMatch>
+    
+    # Headers específicos para APIs
+    <FilesMatch "^api/.*\.php$">
+        Header always set Content-Type "application/json; charset=utf-8"
+        Header set Cache-Control "no-store, no-cache, must-revalidate"
+        Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+        Header set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
+        Header set Access-Control-Max-Age "86400"
+    </FilesMatch>
+    
+    # CORS para desenvolvimento local
+    <If "%{HTTP_HOST} =~ /localhost/ || %{HTTP_HOST} =~ /127\.0\.0\.1/ || %{HTTP_HOST} =~ /\.local$/">
+        Header set Access-Control-Allow-Origin "*"
+        Header set Access-Control-Allow-Credentials "true"
+    </If>
+</IfModule>
+
+# --- PROTEÇÃO CONTRA HOTLINKING ---
+RewriteCond %{HTTP_REFERER} !^$
+RewriteCond %{HTTP_REFERER} !^https?://(www\.)?(embrapol\.com\.br|localhost|127\.0\.0\.1|.*\.local) [NC]
+RewriteCond %{REQUEST_URI} \.(jpe?g|png|gif|bmp|css|js|ico|svg)$ [NC]
+RewriteRule . - [F,L]
+
+# --- PROTEÇÃO CONTRA BOTS E CRAWLERS MALICIOSOS ---
+RewriteCond %{HTTP_USER_AGENT} ^$ [OR]
+RewriteCond %{HTTP_USER_AGENT} (libwww-perl|wget|python|nikto|curl|scan|java|winhttp|clshttp|loader) [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} (%0A|%0D|%27|%3C|%3E|%00) [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} (;|<|>|'|"|\)|\(|%0A|%0D|%22|%27|%28|%3C|%3E|%00).*(libwww-perl|wget|python|nikto|curl|scan|java|winhttp|HTTrack|clshttp|archiver|loader|email|harvest|extract|grab|miner) [NC,OR]
+RewriteCond %{HTTP_USER_AGENT} (semrush|ahrefs|majestic|moz|screaming|frog) [NC]
+RewriteRule .* - [F,L]
+
+# --- PROTEÇÃO CONTRA DIRECTORY TRAVERSAL ---
+RewriteCond %{QUERY_STRING} \.\.\/ [NC,OR]
+RewriteCond %{QUERY_STRING} \.\.\\ [NC,OR]
+RewriteCond %{QUERY_STRING} \/\.\.\/ [NC,OR]
+RewriteCond %{QUERY_STRING} \\\.\.\\ [NC,OR]
+RewriteCond %{QUERY_STRING} \.\.\%2F [NC,OR]
+RewriteCond %{QUERY_STRING} %2F\.\. [NC]
+RewriteRule .* - [F,L]
+
+# --- PROTEÇÃO CONTRA INJECTION ATTACKS ---
+RewriteCond %{QUERY_STRING} (\<|%3C).*script.*(\>|%3E) [NC,OR]
+RewriteCond %{QUERY_STRING} GLOBALS(=|\[|\%[0-9A-Z]{0,2}) [OR]
+RewriteCond %{QUERY_STRING} _REQUEST(=|\[|\%[0-9A-Z]{0,2}) [OR]
+RewriteCond %{QUERY_STRING} proc/self/environ [OR]
+RewriteCond %{QUERY_STRING} mosConfig_[a-zA-Z_]{1,21}(=|\%3D) [OR]
+RewriteCond %{QUERY_STRING} base64_(en|de)code[^(]*\([^)]*\) [OR]
+RewriteCond %{QUERY_STRING} (<|%3C)([^s]*s)+cript.*(>|%3E) [NC,OR]
+RewriteCond %{QUERY_STRING} (<|%3C).*iframe.*(>|%3E) [NC,OR]
+RewriteCond %{QUERY_STRING} union.*select.*\( [NC,OR]
+RewriteCond %{QUERY_STRING} concat.*\( [NC,OR]
+RewriteCond %{QUERY_STRING} (sp_executesql|xp_cmdshell|sp_makewebtask) [NC]
+RewriteRule .* - [F,L]
+
+# --- PROTEÇÃO CONTRA COMMON EXPLOITS ---
+RewriteCond %{REQUEST_URI} (timthumb|phpthumb|thumb|thumbnail)\.php [NC,OR]
+RewriteCond %{REQUEST_URI} \.(aspx?|jsp|cgi)$ [NC,OR]
+RewriteCond %{REQUEST_URI} /(admin|wp-admin|administrator|phpmyadmin|pma|mysql|database) [NC,OR]
+RewriteCond %{REQUEST_URI} \.(bak|backup|old|orig|original|tmp|temp|~)$ [NC,OR]
+RewriteCond %{REQUEST_URI} /\.(bash_|mysql_|ssh|)history [NC,OR]
+RewriteCond %{REQUEST_URI} /(xmlrpc\.php|readme\.html|license\.txt) [NC]
+RewriteRule .* - [F,L]
+
+# --- RATE LIMITING BÁSICO ---
+# Limita requests muito rápidos do mesmo IP
+RewriteMap requests "dbm:/tmp/apache_requests"
+RewriteCond %{REMOTE_ADDR} !^(127\.0\.0\.1|192\.168\.) [NC]
+RewriteCond ${requests:%{REMOTE_ADDR}|0} >30
+RewriteRule .* - [F,L]
+
+# --- CONFIGURAÇÕES DE MIME TYPES ---
+<IfModule mod_mime.c>
+    # Tipos de arquivo JavaScript
+    AddType application/javascript .js .mjs
+    AddType application/json .json
+    AddType application/manifest+json .webmanifest
+    
+    # Tipos de arquivo CSS
+    AddType text/css .css
+    
+    # Tipos de arquivo de fonte
+    AddType font/woff .woff
+    AddType font/woff2 .woff2
+    AddType font/ttf .ttf
+    AddType font/otf .otf
+    AddType application/font-woff .woff
+    AddType application/font-woff2 .woff2
+    
+    # Tipos de arquivo de imagem
+    AddType image/svg+xml .svg .svgz
+    AddType image/webp .webp
+    AddType image/avif .avif
+    
+    # Tipos de arquivo de vídeo
+    AddType video/mp4 .mp4
+    AddType video/webm .webm
+    
+    # Outros tipos importantes
+    AddType application/xml .xml
+    AddType text/x-component .htc
+</IfModule>
+
+# --- CONFIGURAÇÕES PHP (se mod_php estiver disponível) ---
+<IfModule mod_php.c>
+    php_value max_execution_time 30
+    php_value max_input_time 60
+    php_value memory_limit 256M
+    php_value post_max_size 50M
+    php_value upload_max_filesize 20M
+    php_value max_file_uploads 20
+    php_value session.cookie_httponly 1
+    php_value session.cookie_secure 1
+    php_value session.use_only_cookies 1
+    php_value session.cookie_samesite "Lax"
+    php_flag display_errors Off
+    php_flag display_startup_errors Off
+    php_flag log_errors On
+    php_flag expose_php Off
+    php_flag allow_url_fopen Off
+    php_flag allow_url_include Off
+</IfModule>
+
+# --- PÁGINAS DE ERRO CUSTOMIZADAS ---
+ErrorDocument 400 /erro.php?code=400
+ErrorDocument 401 /erro.php?code=401
+ErrorDocument 403 /erro.php?code=403
+ErrorDocument 404 /erro.php?code=404
+ErrorDocument 405 /erro.php?code=405
+ErrorDocument 408 /erro.php?code=408
+ErrorDocument 410 /erro.php?code=410
+ErrorDocument 411 /erro.php?code=411
+ErrorDocument 412 /erro.php?code=412
+ErrorDocument 413 /erro.php?code=413
+ErrorDocument 414 /erro.php?code=414
+ErrorDocument 415 /erro.php?code=415
+ErrorDocument 500 /erro.php?code=500
+ErrorDocument 501 /erro.php?code=501
+ErrorDocument 502 /erro.php?code=502
+ErrorDocument 503 /erro.php?code=503
+ErrorDocument 506 /erro.php?code=506
+
+# --- LIMITES DE RECURSOS ---
+# Limite de tamanho do corpo da requisição (50MB)
+LimitRequestBody 52428800
+# Limite de campos no cabeçalho
+LimitRequestFields 100
+# Limite de tamanho do cabeçalho
+LimitRequestFieldSize 8190
+# Limite de tamanho da linha de requisição
+LimitRequestLine 8190
+
+# --- CONFIGURAÇÕES DE DEFLATE/GZIP AVANÇADAS ---
+<IfModule mod_deflate.c>
+    # Força deflate para navegadores problemáticos
+    BrowserMatch ^Mozilla/4 gzip-only-text/html
+    BrowserMatch ^Mozilla/4\.0[678] no-gzip
+    BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
+    
+    # Configura proxy para arquivos comprimidos
+    <IfModule mod_headers.c>
+        Header append Vary User-Agent env=!dont-vary
+    </IfModule>
+    
+    # Níveis de compressão
+    DeflateCompressionLevel 6
+    DeflateMemLevel 9
+    DeflateWindowSize 15
+</IfModule>
+
+# --- CONFIGURAÇÕES DE ETAG ---
+<IfModule mod_headers.c>
+    # Remove ETags (usamos cache control)
+    Header unset ETag
+    FileETag None
+</IfModule>
+
+# --- PREVENÇÃO DE SPAM DE FORMULÁRIOS ---
+# Bloqueia submissões muito rápidas (menos de 2 segundos)
+RewriteCond %{HTTP_REFERER} !^https?://(www\.)?(embrapol\.com\.br|localhost|127\.0\.0\.1|.*\.local) [NC]
+RewriteCond %{REQUEST_METHOD} POST
+RewriteCond %{HTTP:Content-Type} application/x-www-form-urlencoded [NC]
+RewriteRule ^(api|login|cadastro|contact) - [F,L]
+
+# --- CONFIGURAÇÕES FINAIS ---
+# Força codificação UTF-8
+AddDefaultCharset UTF-8
+
+# Configuração de timezone (se suportado)
+<IfModule mod_env.c>
+    SetEnv TZ America/Sao_Paulo
+</IfModule>
+
+# Otimizações de performance
+<IfModule mod_alias.c>
+    # Redireciona trailing slash para URLs limpas
+    RedirectMatch 301 ^/(.+)/$ /$1
+</IfModule>
+
+# --- COMENTÁRIO FINAL ---
+# Arquivo .htaccess otimizado para o Sistema de Campanhas EPS
+# Versão: 4.0 - Compatível com Apache 2.4+ e Laragon/XAMPP
+# Última atualização: 2024
+# Configuração premium com máxima segurança e performance

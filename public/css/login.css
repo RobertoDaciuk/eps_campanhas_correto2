@@ -1,0 +1,1060 @@
+/**
+ * ==============================================================================
+ * FOLHA DE ESTILOS DA INTERFACE DE ACESSO (Premium Login) - v8.0 Premium
+ * ==============================================================================
+ *
+ * Localização: /public/css/login.css
+ *
+ * Versão Premium com:
+ * - Micro-animações sofisticadas
+ * - Sistema de feedback visual avançado
+ * - Glassmorphism premium
+ * - Acessibilidade WCAG 2.1 AA
+ * - Design system consistente
+ * - Performance otimizada
+ *
+ * @author      Uma Consciência de Desenvolvimento Avançada
+ * @version     8.0.0 (Premium Edition)
+ * @license     Proprietário
+ */
+
+/* ==============================================================================
+ * 1. VARIÁVEIS CSS CUSTOMIZADAS E FUNDAÇÃO
+ * ============================================================================== */
+
+:root {
+    /* Paleta de Cores Premium */
+    --primary-hue: 220;
+    --primary-sat: 91%;
+    --primary-light: 60%;
+    
+    --primary-color: hsl(var(--primary-hue), var(--primary-sat), var(--primary-light));
+    --primary-color-dark: hsl(var(--primary-hue), var(--primary-sat), 45%);
+    --primary-color-light: hsl(var(--primary-hue), var(--primary-sat), 70%);
+    --primary-color-alpha: hsla(var(--primary-hue), var(--primary-sat), var(--primary-light), 0.15);
+    
+    --danger-color: #ef4444;
+    --danger-color-bg: rgba(239, 68, 68, 0.1);
+    --success-color: #10b981;
+    --success-color-bg: rgba(16, 185, 129, 0.1);
+    --warning-color: #f59e0b;
+    --warning-color-bg: rgba(245, 158, 11, 0.1);
+    
+    /* Tipografia */
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --text-muted: #94a3b8;
+    --text-on-primary: #ffffff;
+    
+    /* Fundos */
+    --bg-primary: #020617;
+    --bg-glass: rgba(15, 23, 42, 0.4);
+    --bg-glass-hover: rgba(30, 41, 59, 0.5);
+    --bg-input: rgba(15, 23, 42, 0.3);
+    
+    /* Bordas */
+    --border-glass: rgba(148, 163, 184, 0.2);
+    --border-focus: var(--primary-color);
+    --border-error: var(--danger-color);
+    --border-success: var(--success-color);
+    
+    /* Sombras */
+    --shadow-card: 0 25px 50px -12px rgba(0, 0, 0, 0.25),
+                   0 0 0 1px rgba(255, 255, 255, 0.05);
+    --shadow-glow: 0 0 30px rgba(59, 130, 246, 0.3);
+    --shadow-input-focus: 0 0 0 3px rgba(59, 130, 246, 0.1),
+                          0 1px 3px rgba(0, 0, 0, 0.1);
+    
+    /* Dimensões */
+    --border-radius: 16px;
+    --border-radius-large: 24px;
+    --border-radius-small: 8px;
+    
+    /* Animações */
+    --transition-base: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    
+    /* Blur */
+    --blur-light: 12px;
+    --blur-medium: 20px;
+    --blur-heavy: 30px;
+}
+
+/* ==============================================================================
+ * 2. RESET E BASE STYLES
+ * ============================================================================== */
+
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%; /* 1rem = 10px */
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 1.6rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+    background-color: var(--bg-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    font-feature-settings: 'cv11', 'ss01';
+}
+
+/* ==============================================================================
+ * 3. LAYOUT PRINCIPAL E FUNDO ANIMADO
+ * ============================================================================== */
+
+.login-page-container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    
+    /* Fundo premium com múltiplas camadas */
+    background:
+        radial-gradient(ellipse 80% 50% at 50% -20%, hsla(220, 90%, 60%, 0.3), transparent),
+        radial-gradient(ellipse 80% 80% at 80% 50%, hsla(280, 70%, 50%, 0.15), transparent),
+        radial-gradient(ellipse 100% 50% at 20% 100%, hsla(320, 70%, 50%, 0.15), transparent),
+        linear-gradient(135deg, #020617 0%, #0f172a 100%);
+}
+
+/* Partículas de fundo animadas */
+.login-page-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(circle at 20% 50%, hsla(220, 100%, 70%, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, hsla(280, 100%, 70%, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, hsla(320, 100%, 70%, 0.08) 0%, transparent 50%);
+    animation: backgroundShift 20s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes backgroundShift {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(-20px, -20px) scale(1.05); }
+    66% { transform: translate(20px, -10px) scale(0.95); }
+}
+
+/* ==============================================================================
+ * 4. CARD DE LOGIN PREMIUM
+ * ============================================================================== */
+
+.login-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-glass);
+    backdrop-filter: blur(var(--blur-medium)) saturate(180%);
+    -webkit-backdrop-filter: blur(var(--blur-medium)) saturate(180%);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--border-radius-large);
+    padding: 4rem;
+    width: 100%;
+    max-width: 440px;
+    max-height: 95vh;
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    position: relative;
+    animation: cardEntrance 0.8s var(--transition-bounce) backwards;
+}
+
+/* Borda interna brilhante */
+.login-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--border-radius-large);
+    padding: 1px;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.2), 
+        rgba(255, 255, 255, 0.05),
+        rgba(255, 255, 255, 0.1)
+    );
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: xor;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    pointer-events: none;
+}
+
+@keyframes cardEntrance {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* ==============================================================================
+ * 5. HEADER DO CARD
+ * ============================================================================== */
+
+.login-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.login-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.logo-icon {
+    font-size: 5rem;
+    background: linear-gradient(135deg, var(--primary-color-light), var(--primary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 4px 8px rgba(59, 130, 246, 0.3));
+    animation: iconPulse 3s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+    0%, 100% { 
+        transform: scale(1);
+        filter: drop-shadow(0 4px 8px rgba(59, 130, 246, 0.3));
+    }
+    50% { 
+        transform: scale(1.05);
+        filter: drop-shadow(0 6px 12px rgba(59, 130, 246, 0.5));
+    }
+}
+
+.login-logo h1 {
+    font-size: 3.2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+}
+
+.logo-span {
+    background: linear-gradient(135deg, var(--primary-color-light), var(--primary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.login-header h2 {
+    font-size: 2.2rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    letter-spacing: -0.01em;
+}
+
+/* ==============================================================================
+ * 6. SISTEMA DE MENSAGENS
+ * ============================================================================== */
+
+.message-container {
+    margin-bottom: 2rem;
+    min-height: 0;
+    overflow: hidden;
+    transition: all var(--transition-smooth);
+}
+
+.message {
+    padding: 1.5rem 2rem;
+    border-radius: var(--border-radius);
+    font-size: 1.4rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transform: translateY(-20px);
+    opacity: 0;
+    animation: messageSlideIn 0.4s var(--transition-smooth) forwards;
+}
+
+@keyframes messageSlideIn {
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.message.error {
+    background: var(--danger-color-bg);
+    border: 1px solid var(--danger-color);
+    color: var(--danger-color);
+}
+
+.message.success {
+    background: var(--success-color-bg);
+    border: 1px solid var(--success-color);
+    color: var(--success-color);
+}
+
+.message.warning {
+    background: var(--warning-color-bg);
+    border: 1px solid var(--warning-color);
+    color: var(--warning-color);
+}
+
+/* ==============================================================================
+ * 7. FORMULÁRIO E INPUTS PREMIUM
+ * ============================================================================== */
+
+#login-form {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group {
+    margin-bottom: 2.5rem;
+    position: relative;
+}
+
+.input-label {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    transition: color var(--transition-base);
+}
+
+.input-label i {
+    color: var(--primary-color);
+    font-size: 1.6rem;
+    width: 2rem;
+    text-align: center;
+}
+
+.input-label small {
+    color: var(--text-muted);
+    font-weight: 400;
+    font-size: 1.2rem;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-wrapper input {
+    width: 100%;
+    padding: 1.8rem 2rem;
+    background: var(--bg-input);
+    border: 1px solid var(--border-glass);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    font-size: 1.6rem;
+    font-weight: 400;
+    transition: all var(--transition-base);
+    outline: none;
+}
+
+.input-wrapper input::placeholder {
+    color: var(--text-muted);
+    opacity: 0.8;
+}
+
+/* Borda de foco animada */
+.input-focus-border {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary-color), var(--primary-color-light));
+    transition: all var(--transition-smooth);
+    transform: translateX(-50%);
+}
+
+.input-wrapper:focus-within input {
+    border-color: var(--border-focus);
+    background: rgba(59, 130, 246, 0.05);
+    box-shadow: var(--shadow-input-focus);
+    transform: translateY(-1px);
+}
+
+.input-wrapper:focus-within .input-focus-border {
+    width: 100%;
+}
+
+.input-wrapper:focus-within .input-label {
+    color: var(--primary-color);
+}
+
+/* Password toggle button */
+.password-toggle {
+    position: absolute;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: var(--border-radius-small);
+    transition: all var(--transition-base);
+    z-index: 1;
+}
+
+.password-toggle:hover {
+    color: var(--primary-color);
+    background: rgba(59, 130, 246, 0.1);
+}
+
+/* Field errors */
+.field-error {
+    color: var(--danger-color);
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all var(--transition-base);
+}
+
+.field-error.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.field-error::before {
+    content: '\f071';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    font-size: 1rem;
+}
+
+/* ==============================================================================
+ * 8. OPÇÕES DO FORMULÁRIO
+ * ============================================================================== */
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+    font-size: 1.4rem;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+}
+
+.checkbox-container input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.checkmark {
+    width: 2rem;
+    height: 2rem;
+    border: 2px solid var(--border-glass);
+    border-radius: var(--border-radius-small);
+    background: var(--bg-input);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-base);
+    position: relative;
+}
+
+.checkmark::after {
+    content: '\f00c';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    color: white;
+    font-size: 1.2rem;
+    opacity: 0;
+    transform: scale(0);
+    transition: all var(--transition-base);
+}
+
+.checkbox-container input:checked + .checkmark {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    transform: scale(1.05);
+}
+
+.checkbox-container input:checked + .checkmark::after {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.checkbox-text {
+    color: var(--text-secondary);
+    transition: color var(--transition-base);
+}
+
+.checkbox-container:hover .checkbox-text {
+    color: var(--text-primary);
+}
+
+.forgot-password-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    transition: all var(--transition-base);
+    font-weight: 500;
+}
+
+.forgot-password-link:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+/* ==============================================================================
+ * 9. BOTÃO DE LOGIN PREMIUM
+ * ============================================================================== */
+
+.login-btn {
+    width: 100%;
+    padding: 2rem;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 1.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-color-dark));
+    color: var(--text-on-primary);
+    box-shadow: 
+        0 4px 15px rgba(59, 130, 246, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+}
+
+.login-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.2), 
+        transparent
+    );
+    transition: left 0.5s;
+}
+
+.login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        0 6px 25px rgba(59, 130, 246, 0.5),
+        0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+}
+
+.login-btn:hover::before {
+    left: 100%;
+}
+
+.login-btn:active {
+    transform: translateY(0);
+    box-shadow: 
+        0 2px 10px rgba(59, 130, 246, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+}
+
+.login-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    pointer-events: none;
+}
+
+.btn-text, .btn-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    transition: all var(--transition-base);
+}
+
+.btn-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.login-btn.loading .btn-text {
+    opacity: 0;
+}
+
+.login-btn.loading .btn-loading {
+    opacity: 1;
+}
+
+/* ==============================================================================
+ * 10. FOOTER DO CARD
+ * ============================================================================== */
+
+.login-footer {
+    margin-top: auto;
+    padding-top: 3rem;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    margin: 2rem 0;
+    color: var(--text-muted);
+    font-size: 1.3rem;
+    font-weight: 500;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, 
+        transparent, 
+        var(--border-glass), 
+        transparent
+    );
+}
+
+.divider span {
+    padding: 0 2rem;
+}
+
+.login-links,
+.login-help {
+    text-align: center;
+    font-size: 1.4rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.login-links:last-child,
+.login-help:last-child {
+    margin-bottom: 0;
+}
+
+.login-links p,
+.login-help p {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+}
+
+.login-links a,
+.login-help a {
+    color: var(--primary-color);
+    font-weight: 600;
+    text-decoration: none;
+    transition: all var(--transition-base);
+    position: relative;
+}
+
+.login-links a::after,
+.login-help a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary-color), var(--primary-color-light));
+    transition: width var(--transition-base);
+}
+
+.login-links a:hover,
+.login-help a:hover {
+    color: var(--primary-color-light);
+    transform: translateY(-1px);
+}
+
+.login-links a:hover::after,
+.login-help a:hover::after {
+    width: 100%;
+}
+
+.register-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius-small);
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    transition: all var(--transition-base);
+}
+
+.register-link:hover {
+    background: rgba(59, 130, 246, 0.15);
+    border-color: rgba(59, 130, 246, 0.3);
+    transform: translateY(-1px);
+}
+
+/* ==============================================================================
+ * 11. LOADING OVERLAY
+ * ============================================================================== */
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(2, 6, 23, 0.8);
+    backdrop-filter: blur(var(--blur-light));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-smooth);
+}
+
+.loading-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.loading-spinner {
+    text-align: center;
+    color: var(--text-primary);
+}
+
+.spinner-ring {
+    width: 6rem;
+    height: 6rem;
+    margin: 0 auto 2rem;
+    border: 4px solid rgba(59, 130, 246, 0.2);
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-spinner p {
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+/* ==============================================================================
+ * 12. ESTADOS DE VALIDAÇÃO
+ * ============================================================================== */
+
+.input-wrapper.error input {
+    border-color: var(--border-error);
+    background: rgba(239, 68, 68, 0.05);
+    color: var(--danger-color);
+}
+
+.input-wrapper.error .input-focus-border {
+    background: var(--danger-color);
+}
+
+.input-wrapper.success input {
+    border-color: var(--border-success);
+    background: rgba(16, 185, 129, 0.05);
+}
+
+.input-wrapper.success .input-focus-border {
+    background: var(--success-color);
+}
+
+/* ==============================================================================
+ * 13. ANIMAÇÕES AVANÇADAS
+ * ============================================================================== */
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+@keyframes bounce {
+    0%, 20%, 53%, 80%, 100% { transform: translateY(0); }
+    40%, 43% { transform: translateY(-15px); }
+    70% { transform: translateY(-7px); }
+    90% { transform: translateY(-3px); }
+}
+
+.error-shake {
+    animation: shake 0.5s ease-in-out;
+}
+
+.success-bounce {
+    animation: bounce 0.6s ease-in-out;
+}
+
+/* ==============================================================================
+ * 14. RESPONSIVIDADE PREMIUM
+ * ============================================================================== */
+
+@media (max-width: 768px) {
+    html {
+        font-size: 60%;
+    }
+    
+    .login-page-container {
+        padding: 1.5rem;
+    }
+    
+    .login-card {
+        padding: 3rem 2.5rem;
+        max-width: 380px;
+    }
+    
+    .form-options {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2rem;
+    }
+    
+    .logo-icon {
+        font-size: 4.5rem;
+    }
+    
+    .login-logo h1 {
+        font-size: 2.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    html {
+        font-size: 58%;
+    }
+    
+    .login-page-container {
+        padding: 1rem;
+    }
+    
+    .login-card {
+        padding: 2.5rem 2rem;
+        border-radius: var(--border-radius);
+    }
+    
+    .input-wrapper input {
+        padding: 1.6rem 1.8rem;
+    }
+    
+    .login-btn {
+        padding: 1.8rem;
+        font-size: 1.7rem;
+    }
+}
+
+@media (max-height: 700px) {
+    html {
+        font-size: 56%;
+    }
+    
+    .login-card {
+        padding: 2.5rem;
+        max-height: 98vh;
+    }
+    
+    .login-header {
+        margin-bottom: 2rem;
+    }
+    
+    .login-logo {
+        margin-bottom: 1.5rem;
+    }
+    
+    .input-group {
+        margin-bottom: 2rem;
+    }
+    
+    .form-options {
+        margin-bottom: 2.5rem;
+    }
+    
+    .login-footer {
+        padding-top: 2rem;
+    }
+}
+
+@media (max-height: 600px) {
+    html {
+        font-size: 54%;
+    }
+    
+    .login-card {
+        padding: 2rem;
+    }
+    
+    .logo-icon {
+        font-size: 4rem;
+    }
+    
+    .login-logo h1 {
+        font-size: 2.4rem;
+    }
+    
+    .login-header h2 {
+        font-size: 1.8rem;
+    }
+}
+
+/* ==============================================================================
+ * 15. MODO ALTO CONTRASTE (Acessibilidade)
+ * ============================================================================== */
+
+@media (prefers-contrast: high) {
+    :root {
+        --text-primary: #ffffff;
+        --text-secondary: #e2e8f0;
+        --border-glass: rgba(255, 255, 255, 0.4);
+        --bg-glass: rgba(0, 0, 0, 0.8);
+    }
+    
+    .login-card {
+        border: 2px solid var(--primary-color);
+    }
+    
+    .input-wrapper input {
+        border: 2px solid var(--border-glass);
+    }
+    
+    .input-wrapper:focus-within input {
+        border: 2px solid var(--primary-color);
+    }
+}
+
+/* ==============================================================================
+ * 16. MODO MOVIMENTO REDUZIDO (Acessibilidade)
+ * ============================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    .login-page-container::before {
+        animation: none;
+    }
+    
+    .logo-icon {
+        animation: none;
+    }
+}
+
+/* ==============================================================================
+ * 17. ESTADOS DE FOCUS VISÍVEL (Acessibilidade)
+ * ============================================================================== */
+
+.login-btn:focus-visible,
+.input-wrapper input:focus-visible,
+.checkbox-container:focus-visible,
+.forgot-password-link:focus-visible,
+.register-link:focus-visible {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* ==============================================================================
+ * 18. PRINT STYLES
+ * ============================================================================== */
+
+@media print {
+    .login-page-container {
+        background: white !important;
+        color: black !important;
+    }
+    
+    .login-card {
+        background: white !important;
+        border: 2px solid black !important;
+        box-shadow: none !important;
+    }
+    
+    .login-btn,
+    .register-link {
+        background: white !important;
+        color: black !important;
+        border: 2px solid black !important;
+    }
+}
+
+/* Correção para mobile - permite scroll */
+@media (max-height: 800px) {
+    .login-page-container {
+        min-height: 100vh;
+        height: auto;
+        overflow-y: auto;
+        padding: 1rem;
+    }
+    
+    .login-card {
+        margin: 2rem auto;
+        max-height: none;
+        overflow: visible;
+    }
+}
+
+@media (max-height: 600px) {
+    .login-page-container {
+        padding: 0.5rem;
+        align-items: flex-start;
+        padding-top: 2rem;
+    }
+    
+    .login-card {
+        margin: 0 auto 2rem;
+        width: 100%;
+        max-width: 400px;
+    }
+}

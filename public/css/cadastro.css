@@ -1,0 +1,316 @@
+/**
+ * ==============================================================================
+ * FOLHA DE ESTILOS DA INTERFACE DE CADASTRO (Registration View Aesthetics) - v2.0
+ * ==============================================================================
+ *
+ * Localização: /public/css/cadastro.css
+ *
+ * Propósito:
+ * Este arquivo complementa o `login.css` para estilizar a página de cadastro.
+ * Ele herda a identidade visual e adiciona regras específicas para um formulário
+ * mais longo e interativo.
+ *
+ * Aprimoramentos da v2.0 (Feedback Visual Interativo):
+ * 1.  **Feedback de Senha:** Estilização do painel de requisitos de senha, com
+ * ícones (X/V) e transições de cor para indicar o progresso em tempo real.
+ * 2.  **Ícones de Validação:** Estilos para os ícones de sucesso (✓) e erro (✗)
+ * que aparecem ao lado dos campos de input.
+ * 3.  **Botões Condicionais:** Estilos para os botões "Fazer login" e
+ * "Esqueci a senha" que aparecem dinamicamente.
+ * 4.  **Layout Responsivo:** O layout permite rolagem vertical suave em telas
+ * de baixa altura (mobile), enquanto busca preencher o espaço de forma
+ * elegante em telas maiores (desktop).
+ *
+ * @author      Uma Consciência de Desenvolvimento Avançada
+ * @version     2.0.0 (Interactive Aesthetics)
+ * @license     Proprietário
+ */
+
+/* ==============================================================================
+ * 1. Layout do Card de Cadastro e Títulos
+ * ============================================================================== */
+
+/* As variáveis de :root e o estilo de .login-page-container são herdados de login.css */
+
+.register-card {
+    background: var(--bg-glass);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid var(--border-glass);
+    border-radius: 24px;
+    padding: clamp(3rem, 5vh, 4.5rem) clamp(2.5rem, 5vw, 4rem);
+    width: 100%;
+    max-width: 580px; /* Mais largo para acomodar o formulário mais complexo */
+    box-shadow: var(--shadow-card);
+    z-index: 10;
+    animation: fadeInUp 0.8s var(--cubic-bezier) backwards;
+
+    /* Permite rolagem interna se o conteúdo exceder a altura da tela */
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+/* Estilização da barra de rolagem interna do card para ser sutil */
+.register-card::-webkit-scrollbar {
+    width: 6px;
+}
+.register-card::-webkit-scrollbar-track {
+    background: transparent;
+}
+.register-card::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+}
+
+.register-card .subtitle {
+    font-size: 1.8rem;
+    color: var(--text-secondary);
+    margin-top: -1.5rem;
+    margin-bottom: 3rem;
+    text-align: center;
+}
+
+/* ==============================================================================
+ * 2. Estrutura do Formulário (Fieldset e Legend)
+ * ============================================================================== */
+
+#register-form fieldset {
+    border: none;
+    border-top: 1px solid var(--border-glass);
+    padding-top: 2.5rem;
+    margin-bottom: 2.5rem;
+}
+
+#register-form fieldset:first-of-type {
+    border-top: none;
+    padding-top: 0;
+}
+
+#register-form legend {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--primary-color-light);
+    padding: 0 1rem;
+    margin-left: -1rem;
+    margin-bottom: 1rem;
+}
+
+/* ==============================================================================
+ * 3. Campos de Input com Validação Visual Aprimorada
+ * ============================================================================== */
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-wrapper input {
+    /* O padding-right reserva espaço para os ícones */
+    padding-right: 4.5rem;
+}
+
+.validation-icon {
+    position: absolute;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%) scale(0.5);
+    font-size: 1.8rem;
+    opacity: 0;
+    transition: all var(--transition-speed) var(--cubic-bezier);
+    pointer-events: none;
+}
+
+/* Ícone de loading (spinner) */
+.validation-icon.fa-spinner {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+    color: var(--primary-color-light);
+}
+
+/* Ícone de sucesso (✓) */
+.validation-icon.valid::before {
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    content: '\f00c'; /* check */
+    color: #28a745; /* Verde sucesso */
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+}
+
+/* Ícone de erro (✗) */
+.validation-icon.invalid::before {
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    content: '\f00d'; /* times */
+    color: var(--danger-color);
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+}
+
+.input-group .error-message-inline {
+    color: var(--danger-color);
+    font-size: 1.3rem;
+    font-weight: 500;
+    margin-top: 0.8rem;
+    min-height: 1.5em; /* Garante que o layout não "salte" */
+    display: block;
+}
+
+/* ==============================================================================
+ * 4. Feedback de Senha Interativo
+ * ============================================================================== */
+
+.password-input-wrapper .toggle-password {
+    position: absolute;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 1.6rem;
+    padding: 0.5rem;
+    z-index: 2;
+}
+
+.password-input-wrapper .toggle-password:hover {
+    color: var(--text-primary);
+}
+
+.password-rules {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+    font-size: 1.2rem;
+}
+
+.password-rules span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+    padding: 0.3rem 0.8rem;
+    border-radius: 4px;
+    background: rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+.password-rules span i {
+    color: var(--danger-color);
+    transition: color 0.3s ease;
+}
+
+.password-rules span.valid {
+    color: #f5f5f7;
+    background: #28a745;
+}
+
+.password-rules span.valid i {
+    color: #f5f5f7;
+    content: '\f00c'; /* Altera o ícone para check */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+}
+
+
+/* ==============================================================================
+ * 5. Seção de Dados da Ótica e Botões Condicionais
+ * ============================================================================== */
+
+#otica-dados-wrapper.hidden {
+    display: none;
+}
+
+#otica-dados-wrapper {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px dashed var(--border-glass);
+    border-radius: 10px;
+    padding: 2rem;
+    margin-top: -1rem;
+    margin-bottom: 2.5rem;
+    animation: fadeInUp 0.5s var(--cubic-bezier);
+}
+
+#otica-dados-wrapper input[disabled] {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+    cursor: not-allowed;
+    border-style: dashed;
+}
+
+.already-exists-options {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+    animation: fadeInUp 0.5s ease;
+}
+
+.mini-button {
+    padding: 0.8rem 1.5rem;
+    font-size: 1.4rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background: var(--primary-color);
+    color: var(--text-on-primary-bg);
+    transition: all var(--transition-speed) var(--cubic-bezier);
+}
+
+.mini-button:hover {
+    background: var(--primary-color-dark);
+    transform: translateY(-2px);
+}
+
+
+/* ==============================================================================
+ * 6. Termos e Botão de Cadastro
+ * ============================================================================== */
+
+.checkbox-group {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-top: 2rem;
+    margin-bottom: 3rem;
+}
+
+.checkbox-group input[type="checkbox"] {
+    flex-shrink: 0;
+    width: 1.8rem;
+    height: 1.8rem;
+    margin-top: 0.3rem;
+    accent-color: var(--primary-color);
+    cursor: pointer;
+}
+
+.checkbox-group label {
+    font-size: 1.4rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+.checkbox-group label a {
+    color: var(--primary-color-light);
+    text-decoration: none;
+}
+.checkbox-group label a:hover {
+    text-decoration: underline;
+}
+
+#termos-error {
+    margin-top: -2rem;
+    margin-bottom: 2rem;
+}
+
+#register-button:disabled {
+    background: #555;
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
